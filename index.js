@@ -154,21 +154,21 @@ app.post("/crearUsuario", async (req, res) => {
 )
 app.get("/IniciarSesion", async (req, res) => {
     console.log("PETICION PARA INICIAR SESION")
-    console.log(req.body)
+    console.log(req.query)
     try {
-        if (!req.body.hasOwnProperty("CELULAR") || !req.body.hasOwnProperty("CONTRASEÑA")) {
+        if (!req.query.hasOwnProperty("CELULAR") || !req.query.hasOwnProperty("CONTRASEÑA")) {
             res.status(400).json({
                 status: "Verifique los datos ingresados, falta el celular o la contraseña"
             })
         } else {
-            const usuario = await buscarDato({ coleccion: "usuarios", campo: "CELULAR", valor: req.body.CELULAR })
+            const usuario = await buscarDato({ coleccion: "usuarios", campo: "CELULAR", valor: req.query.CELULAR })
             if (usuario.length !== 1) {
                 res.status(401).json({
                     status: "credenciales invalidas",
 
                 })
             } else {
-                if (req.body.CONTRASEÑA !== usuario[0].data.CONTRASEÑA) {
+                if (req.query.CONTRASEÑA !== usuario[0].data.CONTRASEÑA) {
                     res.status(401).json({
                         status: "credenciales invalidas",
 
@@ -176,7 +176,7 @@ app.get("/IniciarSesion", async (req, res) => {
                 } else {
                     res.status(200).json({
                         status: "ok",
-                        usuario:{NOMBRE:usuario[0].data.NOMBRE,CELULAR:req.body.CELULAR}
+                        usuario:{NOMBRE:usuario[0].data.NOMBRE,CELULAR:req.query.CELULAR}
                     })
 
                 }
